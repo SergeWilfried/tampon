@@ -17,6 +17,7 @@ COPY . .
 
 RUN TURBO_VERSION="$(npm list --package-lock-only --json turbo | jq -r '.dependencies.turbo.version')"
 RUN npm install -g "turbo@$TURBO_VERSION"
+RUN npm install -g "sharp"
 
 # Outputs to the /out folder
 # source: https://turbo.build/repo/docs/reference/command-line-reference/prune#--docker
@@ -48,10 +49,10 @@ ENV NEXT_PRIVATE_ENCRYPTION_SECONDARY_KEY="$NEXT_PRIVATE_ENCRYPTION_SECONDARY_KE
 
 
 # Uncomment and use build args to enable remote caching
-# ARG TURBO_TEAM
-# ENV TURBO_TEAM=$TURBO_TEAM
-# ARG TURBO_TOKEN
-# ENV TURBO_TOKEN=$TURBO_TOKEN
+ARG TURBO_TEAM
+ENV TURBO_TEAM=$TURBO_TEAM
+ARG TURBO_TOKEN
+ENV TURBO_TOKEN=$TURBO_TOKEN
 
 # First install the dependencies (as they change less often)
 COPY .gitignore .gitignore
@@ -67,6 +68,7 @@ COPY turbo.json turbo.json
 
 RUN TURBO_VERSION="$(npm list --package-lock-only --json turbo | jq -r '.dependencies.turbo.version')"
 RUN npm install -g "turbo@$TURBO_VERSION"
+RUN npm install -g "sharp"
 
 RUN turbo run build --filter=@documenso/web...
 
